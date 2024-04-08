@@ -7,6 +7,7 @@ import SelectInput from '@/Components/SelectInput';
 
 
 export default function Index({auth, projects, queryParams = null}) {
+    // console.log('projects', projects)
     queryParams = queryParams || {}; //get url params
     const searchFieldChanged = (name,value) => {
         if(value){
@@ -169,10 +170,13 @@ export default function Index({auth, projects, queryParams = null}) {
                                                     {project.id}
                                                 </th>
                                                 <td className="px-6 py-4">
-                                                    <img src="/docs/images/products/apple-watch.png" className="w-16 md:w-32 max-w-full max-h-full" alt={project.name} />
+                                                    <img src={project.image} className="w-16 md:w-32 max-w-full max-h-full" alt={project.name} />
                                                 </td>
-                                                <td className="px-6 py-4">
-                                                    {project.name}
+                                                <td className="px-6 py-4 hover:underline">
+                                                    <Link href={route("projects.show",project.id)}>
+                                                        {project.name}
+                                                    </Link>
+                                                    
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={"px-2 py-1 rounded text-white " + PROJECT_STATUS_CLASS_MAP[project.status]}>

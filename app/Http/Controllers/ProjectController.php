@@ -28,7 +28,11 @@ class ProjectController extends Controller
             $query->whereDate("due_date",request("due_date"));
         }
 
-        $projects = $query->paginate(10)->onEachSide(1);
+        //sorting
+        $sortField = request("sort_field","created_at");
+        $sortDirection = request("sort_direction","desc");
+
+        $projects = $query->orderBy($sortField,$sortDirection)->paginate(10)->onEachSide(1);
         return inertia("Project/Index",[
             'projects' => ProjectResource::collection($projects),
             'queryParams' => request()->query() ?: null

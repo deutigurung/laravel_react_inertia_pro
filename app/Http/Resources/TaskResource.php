@@ -25,9 +25,9 @@ class TaskResource extends JsonResource
             'image' => $this->image,
             'createdBy' => new UserResource($this->createdBy),
             'updatedBy' => new UserResource($this->updatedBy),
-            'assignedUser' => new UserResource($this->assignedUser),
+            'assignedUser' => $this->assignedUser ? new UserResource($this->assignedUser) : null,
             'project' => new ProjectResource($this->project),
-            'created_at' => (new Carbon($this->created_by))->format('Y-m-d'),
+            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
         ];
     }
 }

@@ -15,8 +15,24 @@ class ProjectController extends Controller
     public function index()
     {
         $query = Project::query();
-        $projects = $query->paginate(10);
-        return inertia("Project/Index",['projects' => ProjectResource::collection($projects)]);
+        //search 
+        if(request("name")) {
+            $query->where("name","LIKE","%".request("name")."%");
+        }
+
+        if(request("status")) {
+            $query->where("status",request("status"));
+        }
+
+        if(request("due_date")) {
+            $query->whereDate("due_date",request("due_date"));
+        }
+
+        $projects = $query->paginate(10)->onEachSide(1);
+        return inertia("Project/Index",[
+            'projects' => ProjectResource::collection($projects),
+            'queryParams' => request()->query() ?: null
+        ]);
     }
 
     /**

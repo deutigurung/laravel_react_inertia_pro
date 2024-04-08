@@ -1,9 +1,26 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head , Link } from '@inertiajs/react';
+import { Head , Link, router } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/constant';
+import TextInput from '@/Components/TextInput';
+import SelectInput from '@/Components/SelectInput';
 
-export default function Index({auth, projects}) {
+
+export default function Index({auth, projects, queryParams = null}) {
+    queryParams = queryParams || {}; //get url params
+    const searchFieldChanged = (name,value) => {
+        if(value){
+            queryParams[name] = value;
+        }else{
+            delete queryParams[name];
+        }
+        router.get(route("projects.index"),queryParams) //redirect to project index url with parameters
+    }
+
+    const onKeyPress = (name,e) => {
+       if (e.key !== 'Enter') return; 
+       searchFieldChanged(name, e.target.value);
+    }
     return (
         <AuthenticatedLayout
             user = {auth.user}
@@ -58,6 +75,62 @@ export default function Index({auth, projects}) {
                                             </th>
                                             <th scope="col" className="px-6 py-3">
                                                 <span className="sr-only">Actions</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-nowrap">
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3">
+                                                <div className="flex items-center">
+                                                    
+                                                </div>
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                <div>
+                                                    <TextInput
+                                                    defaultValue = {queryParams.name}
+                                                    onBlur = {(e) => searchFieldChanged('name',e.target.value)} 
+                                                    onKeyPress = {(e) => onKeyPress('name',e) }
+                                                    className="w-full input"
+                                                    placeholder="Project Name"
+                                                    >
+                                                    </TextInput>
+                                                </div>
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                <div className="flex items-center">
+                                                    <SelectInput
+                                                        defaultValue = {queryParams.status}
+                                                        onChange = {(e) => searchFieldChanged('status',e.target.value)}
+                                                        className="w-full"
+                                                    >
+                                                        <option value="">Select Status</option>
+                                                        <option value="pending">Pending</option>
+                                                        <option value="in_progress">In Progress</option>
+                                                        <option value="complete">Completed</option>
+                                                    </SelectInput>
+                                                </div>
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                <TextInput
+                                                    type = "date"
+                                                    defaultValue = {queryParams.due_date}
+                                                    onChange = {(e) => searchFieldChanged('due_date',e.target.value)}
+                                                    className="w-full input"
+                                                    placeholder="Project DueDate"
+                                                    >
+                                                    </TextInput>
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
                                             </th>
                                         </tr>
                                     </thead>

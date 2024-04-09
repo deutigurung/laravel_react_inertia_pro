@@ -36,7 +36,8 @@ class ProjectController extends Controller
         $projects = $query->orderBy($sortField,$sortDirection)->paginate(10)->onEachSide(1);
         return inertia("Project/Index",[
             'projects' => ProjectResource::collection($projects),
-            'queryParams' => request()->query() ?: null
+            'queryParams' => request()->query() ?: null,
+            'success'  => session('success')
         ]);
     }
 
@@ -53,9 +54,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        Project::create([
-            'title' => $request->get('title')
-        ]);
+        $data = $request->validated();
+        $data['created_by'] =  auth()->id();
+        $data['updated_by'] =  auth()->id();
+        Project::create($data);
+        return to_route("projects.index")->with('success','Project created successfully');
     }
 
     /**
@@ -105,9 +108,10 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $project->update([
-            'name' => $request->get('name'),
-        ]);
+        $data = $request->validated();
+        $data['updated_by'] =  auth()->id();
+        $project->update($data);
+        return to_route("projects.index")->with('success','Project updated successfully');
     }
 
     /**
@@ -116,6 +120,6 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->delete();
-
+        return to_route("projects.index")->with('success','Project removed successfully');
     }
 }

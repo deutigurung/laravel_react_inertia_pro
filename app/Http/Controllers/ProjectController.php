@@ -7,6 +7,8 @@ use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -57,6 +59,15 @@ class ProjectController extends Controller
         $data = $request->validated();
         $data['created_by'] =  auth()->id();
         $data['updated_by'] =  auth()->id();
+        if($request->hasFile('image')){
+            $image_tmp = $request->file('image');
+            if($image_tmp->isValid()){
+                $extension = $image_tmp->getClientOriginalExtension();
+                $imageName = Str::random(20).'.'.$extension;
+                Storage::putFileAs('projects',$image_tmp,$imageName);
+                $data['image'] = $imageName;
+            }
+        }
         Project::create($data);
         return to_route("projects.index")->with('success','Project created successfully');
     }
@@ -110,6 +121,19 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
         $data['updated_by'] =  auth()->id();
+        if($request->hasFile('image')){
+            $image_tmp = $request->file('image');
+            //delete old image
+            if($project->image != null){
+                Storage::delete($project->image);
+            }
+            if($image_tmp->isValid()){
+                $extension = $image_tmp->getClientOriginalExtension();
+                $imageName = Str::random(20).'.'.$extension;
+                Storage::putFileAs('projects',$image_tmp,$imageName);
+                $data['image'] = $imageName;
+            }
+        }
         $project->update($data);
         return to_route("projects.index")->with('success','Project updated successfully');
     }

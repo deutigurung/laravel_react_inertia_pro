@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rule;
 
 class UpdateProjectRequest extends FormRequest
 {
@@ -23,10 +25,10 @@ class UpdateProjectRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'description' => 'nullable|string',
-            'due_date' => 'required|date',
-            'status' => 'required|string',
-            'image' => 'nullable|mimes:jpg,png'
+            'description' => ['nullable','string'],
+            'due_date' => ['required','date'],
+            'status' => ['required',Rule::in(['pending','in_progress','complete'])],
+            'image' => ['nullable',File::image()],
         ];
     }
 }

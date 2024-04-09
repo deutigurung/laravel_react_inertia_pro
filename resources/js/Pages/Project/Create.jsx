@@ -104,11 +104,10 @@ export default function Create({auth}) {
                                         id="image"
                                         type="file"
                                         name="image"
-                                        value={data.image}
                                         className="mt-1 block w-full"
                                         autoComplete="image"
                                         isFocused={true}
-                                        onChange={(e) => setData('image', e.target.value)}>
+                                        onChange={(e) => setData('image', e.target.files[0])}>
                                     </TextInput>
                                     <InputError message={errors.image} className="mt-2">
                                     </InputError>

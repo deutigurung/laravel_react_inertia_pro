@@ -125,7 +125,7 @@ class ProjectController extends Controller
             $image_tmp = $request->file('image');
             //delete old image
             if($project->image != null){
-                Storage::delete($project->image);
+                Storage::delete('projects/'.$project->image);
             }
             if($image_tmp->isValid()){
                 $extension = $image_tmp->getClientOriginalExtension();
@@ -143,6 +143,13 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if($project->tasks()->exists()){
+            return to_route("projects.index")->with('success','Unable to remove. Project has tasks.');
+        }
+        //remove image
+        if($project->image != null){
+            Storage::delete('projects/'.$project->image);
+        }
         $project->delete();
         return to_route("projects.index")->with('success','Project removed successfully');
     }

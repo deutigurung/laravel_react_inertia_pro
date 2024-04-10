@@ -109,8 +109,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return inertia("Project/Create",[
-            'project' => $project
+        return inertia("Project/Edit",[
+            'project' => new ProjectResource($project)
         ]);
     }
 
@@ -133,6 +133,8 @@ class ProjectController extends Controller
                 Storage::putFileAs('projects',$image_tmp,$imageName);
                 $data['image'] = $imageName;
             }
+        }else{
+            $data['image'] = $project->image;
         }
         $project->update($data);
         return to_route("projects.index")->with('success','Project updated successfully');

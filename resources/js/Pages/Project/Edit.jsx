@@ -9,17 +9,21 @@ import SelectInput from "@/Components/SelectInput";
 
 export default function Edit({auth, project}) {
 
+    /*Note: HTML Form which has file upload, use post route with method PUT because 
+    using PUT/PATCH in inertia create new form request 
+     with empty data and also not supported by inertia*/
     const { data, setData , post, processing, errors, reset} = useForm({
-        name: '',
-        description: '',
-        due_date: '',
-        status: '',
-        image: ''
+        name: project.name || '',
+        description: project.description || '',
+        due_date: project.due_date || '',
+        status: project.status || '',
+        image: '',
+        _method: 'PUT'
     });
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
-        post(route("projects.store"))
+        post(route("projects.update",project.id))
         reset()
     }
 
@@ -97,7 +101,13 @@ export default function Edit({auth, project}) {
                                     <InputError message={errors.status} className="mt-2">
                                     </InputError>
                                 </div>
-
+                                {
+                                    project.image && (
+                                        <div className="mt-4">
+                                            <img src={project.image} className="w-16 md:w-32 max-w-full max-h-full" alt={project.name} />
+                                        </div>
+                                    )
+                                }
                                 <div>
                                     <InputLabel htmlFor="image" value="Image" />
                                     <TextInput

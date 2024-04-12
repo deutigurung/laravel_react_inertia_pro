@@ -110,7 +110,7 @@ export default function Create({auth, projects, users}){
                                         <option value="">Select Project</option>
                                         {
                                             projects.data.length > 0 && projects.data.map((project)=> (
-                                                <option value={project.id}>{project.name}</option>
+                                                <option value={project.id} key={project.id}>{project.name}</option>
                                             ))
                                         }
 
@@ -128,7 +128,7 @@ export default function Create({auth, projects, users}){
                                         <option value="">Select User</option>
                                         {
                                             users.data.length > 0 && users.data.map((user)=> (
-                                                <option value={user.id}>{user.name}</option>
+                                                <option value={user.id} key={user.id}>{user.name}</option>
                                             ))
                                         }
                                     </SelectInput>

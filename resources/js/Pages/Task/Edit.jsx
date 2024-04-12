@@ -29,7 +29,7 @@ export default function Edit({auth, task, projects, users}){
     return (
         <AuthenticatedLayout
             user = {auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Tasks</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Edit Task</h2>}
         >
             <Head title="Task Edit" />
 

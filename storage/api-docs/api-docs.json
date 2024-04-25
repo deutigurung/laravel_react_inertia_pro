@@ -1,0 +1,178 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Project Lists Api",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/projects": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Get a list of projects",
+                "operationId": "2ea4919d0a733012d5e30a9c60233aca",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Project name"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Project status"
+                    },
+                    {
+                        "name": "due_date",
+                        "in": "query",
+                        "description": "Project deadline date"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get lists of projects"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/api/projects/store": {
+            "post": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Store projects",
+                "operationId": "8517397fe2b0f9879a11d6298e5a7174",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Project Name",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Project Description",
+                        "required": false
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Project status",
+                        "required": true
+                    },
+                    {
+                        "name": "due_date",
+                        "in": "query",
+                        "description": "Project deadline date",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Project Created Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
+        "/api/projects/{project}": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "View single project",
+                "operationId": "552f53652377ec7f5aae9887e6679043",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "query",
+                        "description": "Project View Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show single project"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Update single project",
+                "operationId": "bbeef61e7801cf95e0c1011dd63214ed",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "query",
+                        "description": "Project Update Id"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Project Name",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Project Description",
+                        "required": false
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Project status",
+                        "required": true
+                    },
+                    {
+                        "name": "due_date",
+                        "in": "query",
+                        "description": "Project deadline date",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Project Updated Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Remove single projects",
+                "operationId": "8209c1dde4339910bef9dcdeb7e6b6c9",
+                "parameters": [
+                    {
+                        "name": "project",
+                        "in": "query",
+                        "description": "Project Remove Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Project Remove Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        }
+    }
+}

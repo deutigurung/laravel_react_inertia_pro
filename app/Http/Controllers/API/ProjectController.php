@@ -12,33 +12,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
- /**
-    * @OA\Info(
-    *     title="Project Lists Api",
-    *     version="0.1",
-    * ),
-*/
-class ProjectController extends Controller
+class ProjectController extends BaseController
 {
     /**
         * @OA\Get(
         *     path="/api/projects",
         *     summary="Get a list of projects",
         *     tags={"Projects"},
+        *     security={{"sanctum":{}}},
         *      @OA\Parameter(
         *         name="name",
         *         in="query",
-        *         description="Project name"
+        *         description="Project name",
+        *         @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="status",
         *         in="query",
-        *         description="Project status"
+        *         description="Project status",
+        *        @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="due_date",
         *         in="query",
-        *         description="Project deadline date"
+        *         description="Project deadline date",
+        *         @OA\Schema(type="date"),
         *      ),
         *     @OA\Response(response=200, description="Get lists of projects"),
         *     @OA\Response(response=400, description="Invalid request")
@@ -66,51 +64,60 @@ class ProjectController extends Controller
 
         $projects = $query->orderBy($sortField,$sortDirection)->paginate(10)->onEachSide(1);
         return response()->json([
-            'projects' => ProjectResource::collection($projects),
+            'projects' => $projects,
             'queryParams' => request()->query() ?: null,
         ]);
 
     }
 
     /**
-      
         * @OA\POST(
         *     path="/api/projects/store",
         *     summary="Store projects",
+        *     security={{"sanctum":{}}},
         *      @OA\Parameter(
         *         name="name",
         *         in="query",
         *         required=true,
-        *         description="Project Name"
+        *         description="Project Name",
+        *        @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="description",
         *         in="query",
         *         required=false,
-        *         description="Project Description"
+        *         description="Project Description",
+        *         @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="status",
         *         in="query",
-         *        required=true,
-        *         description="Project status"
+        *         required=true,
+        *         example="active or inactive", 
+        *         description="Project status",
+        *        @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="due_date",
         *         in="query",
         *         required=true,
-        *         description="Project deadline date"
+        *         example="YYYY-MM-DD", 
+        *         description="Project deadline date",
+        *         @OA\Schema(type="string",format="date"),
         *      ),
         *     tags={"Projects"},
         *     @OA\Response(response=200, description="Project Created Successful"),
-        *     @OA\Response(response=400, description="Invalid request")
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
     public function store(StoreProjectRequest $request)
     {
         $data = $request->validated();
-        $data['created_by'] =  auth()->id();
-        $data['updated_by'] =  auth()->id();
+        $data['created_by'] =  1;
+        $data['updated_by'] =  1;
         if($request->hasFile('image')){
             $image_tmp = $request->file('image');
             if($image_tmp->isValid()){
@@ -122,28 +129,38 @@ class ProjectController extends Controller
         }
         $project = Project::create($data);
         return response()->json([
-            'project' =>  new ProjectResource($project),
+            'project' =>  'test',
             'status' => 200
         ]);
     }
 
     /**
-      
         * @OA\GET(
-        *     path="/api/projects/{project}",
+        *     path="/api/projects/{projectId}",
         *     summary="View single project",
+        *     operationId="viewProjectId",
+        *     security={{"sanctum":{}}},
         *      @OA\Parameter(
-        *         name="project",
-        *         in="query",
-        *         description="Project View Id"
+        *         name="projectId",
+        *         in="path",
+        *         required=true,
+        *         example=1,
+        *         description="Project View Id",
+        *         @OA\Schema(type="integer")
         *      ),
         *     tags={"Projects"},
         *     @OA\Response(response=200, description="Show single project"),
-        *     @OA\Response(response=400, description="Invalid request")
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
     public function show(Project $project)
     {
+        if(is_null($project)){
+            return response()->json(['error' => 'Project not found'], 404);
+        }
         $query = $project->tasks();
         $tasks = $query->get();
         return response()->json([
@@ -154,42 +171,52 @@ class ProjectController extends Controller
     }
 
     /**
-      
         * @OA\PUT(
-        *     path="/api/projects/{project}",
+        *     path="/api/projects/{projectId}",
         *     summary="Update single project",
+        *     operationId="updateProjectId",
+        *     security={{"sanctum":{}}},
         *      @OA\Parameter(
-        *         name="project",
-        *         in="query",
-        *         description="Project Update Id"
+        *         name="projectId",
+        *         in="path",
+        *         required=true,
+        *         description="Project Update Id",
+        *         @OA\Schema(type="integer")
         *      ),
         *      @OA\Parameter(
         *         name="name",
         *         in="query",
         *         required=true,
-        *         description="Project Name"
+        *         description="Project Name",
+        *        @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="description",
         *         in="query",
         *         required=false,
-        *         description="Project Description"
+        *         description="Project Description",
+        *         @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="status",
         *         in="query",
          *        required=true,
-        *         description="Project status"
+        *         description="Project status",
+        *        @OA\Schema(type="string"),
         *      ),
         *      @OA\Parameter(
         *         name="due_date",
         *         in="query",
         *         required=true,
-        *         description="Project deadline date"
+        *         description="Project deadline date",
+        *         @OA\Schema(type="date"),
         *      ),
         *     tags={"Projects"},
         *     @OA\Response(response=200, description="Project Updated Successful"),
-        *     @OA\Response(response=400, description="Invalid request")
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
     public function update(UpdateProjectRequest $request, Project $project)
@@ -221,16 +248,23 @@ class ProjectController extends Controller
       /**
       
         * @OA\DELETE(
-        *     path="/api/projects/{project}",
+        *     path="/api/projects/{projectId}",
         *     summary="Remove single projects",
+        *     operationId="deleteProjectId",
+        *     security={{"sanctum":{}}},
         *      @OA\Parameter(
-        *         name="project",
+        *         name="projectId",
         *         in="query",
-        *         description="Project Remove Id"
+        *         required=true,
+        *         description="Project Remove Id",
+        *         @OA\Schema(type="integer")
         *      ),
         *     tags={"Projects"},
         *     @OA\Response(response=200, description="Project Remove Successful"),
-        *     @OA\Response(response=400, description="Invalid request")
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
     public function destroy(Project $project)

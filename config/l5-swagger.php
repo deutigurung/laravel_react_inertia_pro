@@ -212,6 +212,20 @@ return [
 
                     'passport' => []
                     */
+                    'sanctum' => [ // Unique name of security
+                        'type' => 'apiKey', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
+                        'description' => 'Laravel sanctum oauth2 security.',
+                        'in' => 'header',
+                        'scheme' => 'https',
+                        'flows' => [
+                            "password" => [
+                                "authorizationUrl" => config('app.url') . '/oauth/authorize',
+                                "tokenUrl" => config('app.url') . '/oauth/token',
+                                "refreshUrl" => config('app.url') . '/token/refresh',
+                                "scopes" => []
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],

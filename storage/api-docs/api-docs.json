@@ -1,10 +1,47 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Project Lists Api",
+        "title": "Integration Swagger Api with Laravel Sanctum authentication",
         "version": "0.1"
     },
     "paths": {
+        "/api/login/store": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Authenticate User Login and generate token",
+                "operationId": "65b4746d608da585bf08d8508bed8c54",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email Name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Successful"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    }
+                }
+            }
+        },
         "/api/projects": {
             "get": {
                 "tags": [
@@ -16,17 +53,26 @@
                     {
                         "name": "name",
                         "in": "query",
-                        "description": "Project name"
+                        "description": "Project name",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "status",
                         "in": "query",
-                        "description": "Project status"
+                        "description": "Project status",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "due_date",
                         "in": "query",
-                        "description": "Project deadline date"
+                        "description": "Project deadline date",
+                        "schema": {
+                            "type": "date"
+                        }
                     }
                 ],
                 "responses": {
@@ -36,7 +82,12 @@
                     "400": {
                         "description": "Invalid request"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/projects/store": {
@@ -51,25 +102,40 @@
                         "name": "name",
                         "in": "query",
                         "description": "Project Name",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "description",
                         "in": "query",
                         "description": "Project Description",
-                        "required": false
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "status",
                         "in": "query",
                         "description": "Project status",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "active or inactive"
                     },
                     {
                         "name": "due_date",
                         "in": "query",
                         "description": "Project deadline date",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "example": "YYYY-MM-DD"
                     }
                 ],
                 "responses": {
@@ -78,22 +144,41 @@
                     },
                     "400": {
                         "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized request"
+                    },
+                    "403": {
+                        "description": "Forbidden request"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
-        "/api/projects/{project}": {
+        "/api/projects/{projectId}": {
             "get": {
                 "tags": [
                     "Projects"
                 ],
                 "summary": "View single project",
-                "operationId": "552f53652377ec7f5aae9887e6679043",
+                "operationId": "viewProjectId",
                 "parameters": [
                     {
-                        "name": "project",
-                        "in": "query",
-                        "description": "Project View Id"
+                        "name": "projectId",
+                        "in": "path",
+                        "description": "Project View Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
                     }
                 ],
                 "responses": {
@@ -102,44 +187,74 @@
                     },
                     "400": {
                         "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized request"
+                    },
+                    "403": {
+                        "description": "Forbidden request"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
                     "Projects"
                 ],
                 "summary": "Update single project",
-                "operationId": "bbeef61e7801cf95e0c1011dd63214ed",
+                "operationId": "updateProjectId",
                 "parameters": [
                     {
-                        "name": "project",
-                        "in": "query",
-                        "description": "Project Update Id"
+                        "name": "projectId",
+                        "in": "path",
+                        "description": "Project Update Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     },
                     {
                         "name": "name",
                         "in": "query",
                         "description": "Project Name",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "description",
                         "in": "query",
                         "description": "Project Description",
-                        "required": false
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "status",
                         "in": "query",
                         "description": "Project status",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "due_date",
                         "in": "query",
                         "description": "Project deadline date",
-                        "required": true
+                        "required": true,
+                        "schema": {
+                            "type": "date"
+                        }
                     }
                 ],
                 "responses": {
@@ -148,20 +263,38 @@
                     },
                     "400": {
                         "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized request"
+                    },
+                    "403": {
+                        "description": "Forbidden request"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
                     "Projects"
                 ],
                 "summary": "Remove single projects",
-                "operationId": "8209c1dde4339910bef9dcdeb7e6b6c9",
+                "operationId": "deleteProjectId",
                 "parameters": [
                     {
-                        "name": "project",
+                        "name": "projectId",
                         "in": "query",
-                        "description": "Project Remove Id"
+                        "description": "Project Remove Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -170,9 +303,41 @@
                     },
                     "400": {
                         "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized request"
+                    },
+                    "403": {
+                        "description": "Forbidden request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "security": [
+        {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Laravel sanctum oauth2 security.",
+                "in": "header",
+                "scheme": "https",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "http://localhost:8000//oauth/authorize",
+                        "tokenUrl": "http://localhost:8000//oauth/token",
+                        "refreshUrl": "http://localhost:8000//token/refresh",
+                        "scopes": []
                     }
                 }
             }
         }
-    }
+    ]
 }

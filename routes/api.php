@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('api')->group(function(){
     Route::post('/login/store',[LoginController::class,'login']);
     
-    Route::middleware(['auth','auth:sanctum'])->group(function(){
+    Route::middleware(['auth:sanctum'])->group(function(){
         Route::apiResource('projects',ProjectController::class)->except(['create','edit']);
     });
         

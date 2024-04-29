@@ -198,6 +198,28 @@ return [
                     'in' => 'header', // The location of the API key. Valid values are "query" or "header".
                 ],
                 */
+                'sanctum' => [ // Unique name of security
+                    'type' => 'apiKey', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
+                    'description' => 'Laravel sanctum oauth2 security.',
+                    'name' => 'Authorization',
+                    'in' => 'header',
+                    'scheme' => 'http',
+                    'flows' => [
+                        "password" => [
+                            "authorizationUrl" => config('app.url') . '/oauth/authorize',
+                            "tokenUrl" => config('app.url') . '/oauth/token',
+                            "refreshUrl" => config('app.url') . '/token/refresh',
+                            "scopes" => []
+                        ],
+                    ],
+                ],
+
+                // 'bearer_token' => [
+                //     'type' => 'http',
+                //     'description' => 'Laravel Sanctum token authentication',
+                //     'scheme' => 'bearer',
+                //     'bearerFormat' => 'JWT'
+                // ],
             ],
             'security' => [
                 /*
@@ -212,20 +234,7 @@ return [
 
                     'passport' => []
                     */
-                    'sanctum' => [ // Unique name of security
-                        'type' => 'apiKey', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
-                        'description' => 'Laravel sanctum oauth2 security.',
-                        'in' => 'header',
-                        'scheme' => 'https',
-                        'flows' => [
-                            "password" => [
-                                "authorizationUrl" => config('app.url') . '/oauth/authorize',
-                                "tokenUrl" => config('app.url') . '/oauth/token',
-                                "refreshUrl" => config('app.url') . '/token/refresh',
-                                "scopes" => []
-                            ],
-                        ],
-                    ],
+                    
                 ],
             ],
         ],

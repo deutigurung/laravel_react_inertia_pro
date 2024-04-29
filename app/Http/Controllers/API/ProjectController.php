@@ -38,6 +38,12 @@ class ProjectController extends BaseController
         *         description="Project deadline date",
         *         @OA\Schema(type="date"),
         *      ),
+        *     @OA\RequestBody(
+        *         @OA\JsonContent(),
+        *         @OA\MediaType(
+        *            mediaType="multipart/form-data",
+        *        ),
+        *    ),
         *     @OA\Response(response=200, description="Get lists of projects"),
         *     @OA\Response(response=400, description="Invalid request")
         * )

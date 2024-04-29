@@ -75,6 +75,14 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {},
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Get lists of projects"
@@ -322,13 +330,14 @@
             }
         }
     },
-    "security": [
-        {
+    "components": {
+        "securitySchemes": {
             "sanctum": {
                 "type": "apiKey",
                 "description": "Laravel sanctum oauth2 security.",
+                "name": "Authorization",
                 "in": "header",
-                "scheme": "https",
+                "scheme": "http",
                 "flows": {
                     "password": {
                         "authorizationUrl": "http://localhost:8000//oauth/authorize",
@@ -339,5 +348,5 @@
                 }
             }
         }
-    ]
+    }
 }

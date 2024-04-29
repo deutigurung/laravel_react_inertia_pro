@@ -38,7 +38,14 @@ class ProjectController extends BaseController
      *         description="Due date of the project",
      *         @OA\Schema(type="string", format="date")
      *     ),
-     *     @OA\Response(response=200, description="Get lists of projects", @OA\JsonContent()),
+     *      @OA\Response(response=200, description="successful operation",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="data", ref="#components/schemas/ProjectResource")
+     *              )
+     *          )
+     *      ),
      *     @OA\Response(response=400, description="Invalid request", @OA\JsonContent()),
      * )
      */
@@ -76,25 +83,24 @@ class ProjectController extends BaseController
         *     path="/api/projects",
         *     summary="Store projects",
         *     security={{"sanctum":{}}},
-        *     @OA\RequestBody(
-        *         @OA\JsonContent(),
-        *         @OA\MediaType(
-        *            mediaType="multipart/form-data",
-        *            @OA\Schema(
-        *               type="object",
-        *               required={"name","status", "due_date"},
-        *               @OA\Property(property="name", type="text"),
-        *               @OA\Property(property="status", type="text"),
-        *               @OA\Property(property="due_date", type="date"),
-        *            ),
-        *        ),
+        *      @OA\RequestBody(
+        *          @OA\MediaType(mediaType="application/json",
+        *               @OA\Schema(ref="#/components/schemas/StoreProjectRequest")   
+        *         )
         *      ),
         *     tags={"Projects"},
-        *     @OA\Response(response=200, description="Project Created Successful",  @OA\JsonContent()),
-        *     @OA\Response(response=400, description="Invalid request",  @OA\JsonContent()),
-        *     @OA\Response(response=401, description="Unauthorized request",  @OA\JsonContent()),
-        *     @OA\Response(response=403, description="Forbidden request",  @OA\JsonContent()),
-        *     @OA\Response(response=404, description="Not Found",  @OA\JsonContent())
+        *      @OA\Response(response=200, description="successful operation",
+        *          @OA\MediaType(
+        *              mediaType="application/json",
+        *              @OA\Schema(
+        *                  @OA\Property(property="data", ref="#components/schemas/ProjectResource")
+        *              )
+        *          )
+        *      ),
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
     public function store(StoreProjectRequest $request)
@@ -133,11 +139,11 @@ class ProjectController extends BaseController
         *         @OA\Schema(type="integer")
         *      ),
         *     tags={"Projects"},
-        *     @OA\Response(response=200, description="Project Created Successful",  @OA\JsonContent()),
-        *     @OA\Response(response=400, description="Invalid request",  @OA\JsonContent()),
-        *     @OA\Response(response=401, description="Unauthorized request",  @OA\JsonContent()),
-        *     @OA\Response(response=403, description="Forbidden request",  @OA\JsonContent()),
-        *     @OA\Response(response=404, description="Not Found",  @OA\JsonContent())
+        *     @OA\Response(response=200, description="Project view Successful"),
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
     public function show(Project $project)
@@ -167,22 +173,17 @@ class ProjectController extends BaseController
         *         description="Project Update Id",
         *         @OA\Schema(type="integer")
         *      ),
-        *     @OA\RequestBody(
-        *         required=true,
-        *         description="Updated project data",
-        *         @OA\JsonContent(
-        *             required={"name", "status", "due_date"},
-        *             @OA\Property(property="name", type="string"),
-        *             @OA\Property(property="status", type="string"),
-        *             @OA\Property(property="due_date", type="string", format="date"),
-        *         ),
-        *     ),
+        *      @OA\RequestBody(
+        *          @OA\MediaType(mediaType="application/json",
+        *               @OA\Schema(ref="#/components/schemas/UpdateProjectRequest")   
+        *         )
+        *      ),
         *     tags={"Projects"},
-        *     @OA\Response(response=200, description="Project Created Successful",  @OA\JsonContent()),
-        *     @OA\Response(response=400, description="Invalid request",  @OA\JsonContent()),
-        *     @OA\Response(response=401, description="Unauthorized request",  @OA\JsonContent()),
-        *     @OA\Response(response=403, description="Forbidden request",  @OA\JsonContent()),
-        *     @OA\Response(response=404, description="Not Found",  @OA\JsonContent())
+        *     @OA\Response(response=200, description="Project updated Successful"),
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
 
@@ -226,11 +227,11 @@ class ProjectController extends BaseController
         *         @OA\Schema(type="integer")
         *      ),
         *     tags={"Projects"},
-        *     @OA\Response(response=200, description="Project Created Successful",  @OA\JsonContent()),
-        *     @OA\Response(response=400, description="Invalid request",  @OA\JsonContent()),
-        *     @OA\Response(response=401, description="Unauthorized request",  @OA\JsonContent()),
-        *     @OA\Response(response=403, description="Forbidden request",  @OA\JsonContent()),
-        *     @OA\Response(response=404, description="Not Found",  @OA\JsonContent())
+        *     @OA\Response(response=200, description="Project deleted Successful"),
+        *     @OA\Response(response=400, description="Invalid request"),
+        *     @OA\Response(response=401, description="Unauthorized request"),
+        *     @OA\Response(response=403, description="Forbidden request"),
+        *     @OA\Response(response=404, description="Not Found")
         * )
     */
     public function destroy(Project $project)

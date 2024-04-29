@@ -93,12 +93,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Invalid request"
                     }
                 },
                 "security": [
@@ -179,7 +174,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Project Created Successful"
+                        "description": "Project view Successful"
                     },
                     "400": {
                         "description": "Invalid request"
@@ -374,6 +369,10 @@
                     }
                 },
                 "type": "object"
+            },
+            "ProjectResource": {
+                "title": "Project data",
+                "description": "Return project response data"
             }
         },
         "securitySchemes": {

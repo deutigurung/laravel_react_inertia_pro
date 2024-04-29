@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @OA\Schema(
+ *      title="Project data",
+ *      description="Return project response data",
+ * )
+ */
 class ProjectResource extends JsonResource
 {
     public static $wrap = false;

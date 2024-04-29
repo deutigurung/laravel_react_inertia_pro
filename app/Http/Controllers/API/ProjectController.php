@@ -46,7 +46,7 @@ class ProjectController extends BaseController
      *              )
      *          )
      *      ),
-     *     @OA\Response(response=400, description="Invalid request", @OA\JsonContent()),
+     *     @OA\Response(response=400, description="Invalid request"),
      * )
      */
 

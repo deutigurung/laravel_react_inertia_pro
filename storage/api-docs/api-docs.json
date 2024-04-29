@@ -53,7 +53,7 @@
                     {
                         "name": "name",
                         "in": "query",
-                        "description": "Project name",
+                        "description": "Name of the project",
                         "schema": {
                             "type": "string"
                         }
@@ -61,7 +61,7 @@
                     {
                         "name": "status",
                         "in": "query",
-                        "description": "Project status",
+                        "description": "Status of the project",
                         "schema": {
                             "type": "string"
                         }
@@ -69,26 +69,29 @@
                     {
                         "name": "due_date",
                         "in": "query",
-                        "description": "Project deadline date",
+                        "description": "Due date of the project",
                         "schema": {
-                            "type": "date"
+                            "type": "string",
+                            "format": "date"
                         }
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {},
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
-                        "description": "Get lists of projects"
+                        "description": "Get lists of projects",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Invalid request"
+                        "description": "Invalid request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -96,71 +99,82 @@
                         "sanctum": []
                     }
                 ]
-            }
-        },
-        "/api/projects/store": {
+            },
             "post": {
                 "tags": [
                     "Projects"
                 ],
                 "summary": "Store projects",
-                "operationId": "8517397fe2b0f9879a11d6298e5a7174",
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Project Name",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "description",
-                        "in": "query",
-                        "description": "Project Description",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Project status",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "operationId": "48ad9efff74ef8cbc32998fcb386e258",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "status",
+                                    "due_date"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "text"
+                                    },
+                                    "status": {
+                                        "type": "text"
+                                    },
+                                    "due_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         },
-                        "example": "active or inactive"
-                    },
-                    {
-                        "name": "due_date",
-                        "in": "query",
-                        "description": "Project deadline date",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "date"
-                        },
-                        "example": "YYYY-MM-DD"
+                        "application/json": {
+                            "schema": {}
+                        }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
-                        "description": "Project Created Successful"
+                        "description": "Project Created Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Invalid request"
+                        "description": "Invalid request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthorized request"
+                        "description": "Unauthorized request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Forbidden request"
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not Found"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -191,95 +205,44 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Show single project"
+                        "description": "Project Created Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Invalid request"
+                        "description": "Invalid request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthorized request"
+                        "description": "Unauthorized request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Forbidden request"
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not Found"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Projects"
-                ],
-                "summary": "Update single project",
-                "operationId": "updateProjectId",
-                "parameters": [
-                    {
-                        "name": "projectId",
-                        "in": "path",
-                        "description": "Project Update Id",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
                         }
-                    },
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Project Name",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "description",
-                        "in": "query",
-                        "description": "Project Description",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Project status",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "due_date",
-                        "in": "query",
-                        "description": "Project deadline date",
-                        "required": true,
-                        "schema": {
-                            "type": "date"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Project Updated Successful"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "401": {
-                        "description": "Unauthorized request"
-                    },
-                    "403": {
-                        "description": "Forbidden request"
-                    },
-                    "404": {
-                        "description": "Not Found"
                     }
                 },
                 "security": [
@@ -297,7 +260,7 @@
                 "parameters": [
                     {
                         "name": "projectId",
-                        "in": "query",
+                        "in": "path",
                         "description": "Project Remove Id",
                         "required": true,
                         "schema": {
@@ -307,19 +270,137 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Project Remove Successful"
+                        "description": "Project Created Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Invalid request"
+                        "description": "Invalid request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthorized request"
+                        "description": "Unauthorized request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Forbidden request"
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not Found"
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Update projects",
+                "operationId": "updateProjectId",
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "path",
+                        "description": "Project Update Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Updated project data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "status",
+                                    "due_date"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "type": "string"
+                                    },
+                                    "due_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Project Created Successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 },
                 "security": [
